@@ -1,1 +1,1 @@
-web: gunicorn fitness_project.wsgi --log-file -
+web: gunicorn FitForm.wsgi --log-file -
