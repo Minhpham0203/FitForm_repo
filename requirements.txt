@@ -7,8 +7,10 @@ django-allauth==65.12.1
 django-cors-headers==4.9.0
 django-filter==25.2
 djangorestframework==3.16.1
+gunicorn==23.0.0
 idna==3.11
 mssql-django==1.6
+packaging==25.0
 pyodbc==5.3.0
 pytz==2025.2
 requests==2.32.5
