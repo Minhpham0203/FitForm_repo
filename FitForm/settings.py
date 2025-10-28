@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import os
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -105,25 +107,37 @@ WSGI_APPLICATION = 'FitForm.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'mssql',
+DATABASE_URL = os.environ.get('DATABASE_URL')
 
-        # --- Điền thông tin của bạn ---
-        'NAME': 'FitForm_db',               # Tên CSDL bạn vừa tạo ở Giai đoạn 2
-        'USER': 'sa',                       # User bạn đã cấu hình ở Giai đoạn 1
-        'PASSWORD': 'Minhpham@0203', # Mật khẩu bạn đặt cho user 'sa'
-        'HOST': 'localhost\\MSSQLSERVER01',
-        # 'PORT': '1433',                     # Port mặc định
-        # ---
-
-        'OPTIONS': {
-            'driver': 'ODBC Driver 17 for SQL Server', 
-            # LƯU Ý: Tên driver này phải khớp với bản ODBC bạn cài.
-            # Nó có thể là 'ODBC Driver 18 for SQL Server' nếu bạn cài bản mới.
-        },
+if DATABASE_URL:
+    # === THIS BLOCK SHOULD RUN ON RAILWAY ===
+    DATABASES = {
+        'default': dj_database_url.config(
+            default=DATABASE_URL,
+            conn_max_age=600
+        )
     }
-}
+else:
+
+    DATABASES = {
+        'default': {
+            'ENGINE': 'mssql',
+
+            # --- Điền thông tin của bạn ---
+            'NAME': 'FitForm_db',               # Tên CSDL bạn vừa tạo ở Giai đoạn 2
+            'USER': 'sa',                       # User bạn đã cấu hình ở Giai đoạn 1
+            'PASSWORD': 'Minhpham@0203', # Mật khẩu bạn đặt cho user 'sa'
+            'HOST': 'localhost\\MSSQLSERVER01',
+            # 'PORT': '1433',                     # Port mặc định
+            # ---
+
+            'OPTIONS': {
+                'driver': 'ODBC Driver 17 for SQL Server', 
+                # LƯU Ý: Tên driver này phải khớp với bản ODBC bạn cài.
+                # Nó có thể là 'ODBC Driver 18 for SQL Server' nếu bạn cài bản mới.
+            },
+        }
+    }
 
 
 # Password validation
