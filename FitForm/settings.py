@@ -25,9 +25,26 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-8-c5#nv(7hq8!a!!_%#!tv87w2yg3c0c%dqnpzo^jtf%(e(cae'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
-ALLOWED_HOSTS = []
+import os # Make sure this is imported at the top
+# ... other imports ...
+
+# SECURITY WARNING: don't run with debug turned on in production!
+# Read DEBUG from environment variable, default to True for local dev
+# Important: Set DEBUG=False in Render's environment variables!
+DEBUG = os.environ.get('DEBUG', 'True') == 'True'
+
+# --- ADD THIS ENTIRE BLOCK ---
+# Read ALLOWED_HOSTS from environment variable DJANGO_ALLOWED_HOSTS
+ALLOWED_HOSTS_STRING = os.environ.get('DJANGO_ALLOWED_HOSTS')
+
+if ALLOWED_HOSTS_STRING:
+    # If the env var exists (on Render), split it by comma
+    ALLOWED_HOSTS = ALLOWED_HOSTS_STRING.split(',')
+else:
+    # If the env var DOES NOT exist (running locally), use defaults
+    ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+
 
 
 # Application definition
