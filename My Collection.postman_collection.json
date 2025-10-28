@@ -1,0 +1,731 @@
+{
+	"info": {
+		"_postman_id": "c5650c76-d849-4f65-9d31-20cf00b8cf52",
+		"name": "My Collection",
+		"description": "### Welcome to Postman! This is your first collection.\n\nCollections are your starting point for building and testing APIs. You can use this one to:\n\n• Group related requests  \n• Test your API in real-world scenarios  \n• Document and share your requests\n\nUpdate the name and overview whenever you’re ready to make it yours.\n\n[Learn more about Postman Collections.](https://learning.postman.com/docs/collections/collections-overview/)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "49554682",
+		"_collection_link": "https://minhpham02032005-2071104.postman.co/workspace/36a97a6d-d04a-4657-8526-ebc06e7b2129/collection/49554682-c5650c76-d849-4f65-9d31-20cf00b8cf52?action=share&source=collection_link&creator=49554682"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Register New User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"testuser1\",\n  \"email\": \"testuser1@example.com\",\n  \"password1\": \"StrongPassword123\",\n  \"password2\": \"StrongPassword123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/auth/registration/",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"registration",
+								""
+							]
+						},
+						"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+					},
+					"response": []
+				},
+				{
+					"name": "Login (Get Token)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var data = pm.response.json();\r",
+									"pm.collectionVariables.set(\"authToken\", data.key);\r",
+									"console.log(\"Token đã được lưu!\");"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"username\": \"testuser1\",\r\n  \"password\": \"StrongPassword123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/auth/login/",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"login",
+								""
+							]
+						},
+						"description": "Login tài khoản để lấy token"
+					},
+					"response": []
+				}
+			],
+			"description": "API đăng nhập và đăng kí"
+		},
+		{
+			"name": "Profile",
+			"item": [
+				{
+					"name": "Get User Profile",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token {{authToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/profile/",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"profile",
+								""
+							]
+						},
+						"description": "Lấy profile dựa vào token"
+					},
+					"response": []
+				},
+				{
+					"name": "Update User Profile",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token {{authToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"height_cm\": 175,\r\n  \"weight_kg\": 72.5,\r\n  \"age\": 30,\r\n  \"gender\": \"male\",\r\n  \"main_goal\": \"build_muscle\", \r\n  \"experience_level\": \"intermediate\", \r\n  \"days_per_week\": 4,\r\n  \"equipment_available\": \"full_gym\" \r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/profile/",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"profile",
+								""
+							]
+						},
+						"description": "Modify profile dựa vào token"
+					},
+					"response": []
+				}
+			],
+			"description": "API liên quan đến tạo và sửa profile"
+		},
+		{
+			"name": "Plan",
+			"item": [
+				{
+					"name": "Save Plan",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token {{authToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Gợi ý: build_muscle - 4 ngày\",\r\n    \"description\": \"Kế hoạch tự động cho intermediate - 4 ngày/tuần.\",\r\n    \"plan_exercises\": [\r\n        {\r\n            \"exercise_id\": 7,\r\n            \"sets\": 4,\r\n            \"reps\": \"8-12\",\r\n            \"day_number\": 1\r\n        },\r\n        {\r\n            \"exercise_id\": 11,\r\n            \"sets\": 4,\r\n            \"reps\": \"8-12\",\r\n            \"day_number\": 1\r\n        },\r\n        {\r\n            \"exercise_id\": 13,\r\n            \"sets\": 4,\r\n            \"reps\": \"8-12\",\r\n            \"day_number\": 1\r\n        },\r\n        {\r\n            \"exercise_id\": 16,\r\n            \"sets\": 4,\r\n            \"reps\": \"8-12\",\r\n            \"day_number\": 1\r\n        },\r\n        {\r\n            \"exercise_id\": 24,\r\n            \"sets\": 4,\r\n            \"reps\": \"8-12\",\r\n            \"day_number\": 1\r\n        },\r\n        {\r\n            \"exercise_id\": 1,\r\n            \"sets\": 4,\r\n            \"reps\": \"8-12\",\r\n            \"day_number\": 2\r\n        },\r\n        {\r\n            \"exercise_id\": 4,\r\n            \"sets\": 4,\r\n            \"reps\": \"8-12\",\r\n            \"day_number\": 2\r\n        },\r\n        {\r\n            \"exercise_id\": 7,\r\n            \"sets\": 4,\r\n            \"reps\": \"8-12\",\r\n            \"day_number\": 3\r\n        },\r\n        {\r\n            \"exercise_id\": 11,\r\n            \"sets\": 4,\r\n            \"reps\": \"8-12\",\r\n            \"day_number\": 3\r\n        },\r\n        {\r\n            \"exercise_id\": 13,\r\n            \"sets\": 4,\r\n            \"reps\": \"8-12\",\r\n            \"day_number\": 3\r\n        },\r\n        {\r\n            \"exercise_id\": 16,\r\n            \"sets\": 4,\r\n            \"reps\": \"8-12\",\r\n            \"day_number\": 3\r\n        },\r\n        {\r\n            \"exercise_id\": 24,\r\n            \"sets\": 4,\r\n            \"reps\": \"8-12\",\r\n            \"day_number\": 3\r\n        },\r\n        {\r\n            \"exercise_id\": 1,\r\n            \"sets\": 4,\r\n            \"reps\": \"8-12\",\r\n            \"day_number\": 4\r\n        },\r\n        {\r\n            \"exercise_id\": 4,\r\n            \"sets\": 4,\r\n            \"reps\": \"8-12\",\r\n            \"day_number\": 4\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/plans/",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"plans",
+								""
+							]
+						},
+						"description": "accpet workout plan"
+					},
+					"response": []
+				},
+				{
+					"name": "Generate Plan Suggestion",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token {{authToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/plans/generate/",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"plans",
+								"generate",
+								""
+							]
+						},
+						"description": "generate plan workout"
+					},
+					"response": []
+				},
+				{
+					"name": "List My Plans",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token {{authToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/plans/",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"plans",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Plan Detail",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token {{authToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/plans/1/",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"plans",
+								"1",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "API liên quan đến nhận gợi ý plan workout và accept plan workout, lấy danh sách toàn bộ các plans của người dùng đang đăng nhập và lấy specific một kế hoạch cụ thể mà người dùng muốn sử dụng."
+		},
+		{
+			"name": "Session",
+			"item": [
+				{
+					"name": "Save session",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token {{authToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"plan\": 1, \r\n  \"start_time\": \"2025-10-27T13:00:00Z\",\r\n  \"end_time\": \"2025-10-27T13:45:00Z\",\r\n  \"total_calories\": 350,\r\n  \"posture_score_avg\": 88.5,\r\n  \"logs\": [\r\n    {\r\n      \"exercise_name\": \"Barbell Bench Press\",\r\n      \"sets_completed\": 4,\r\n      \"reps_completed\": \"10, 10, 8, 8\",\r\n      \"weight_kg\": \"70, 70, 75, 75\",\r\n      \"posture_feedback\": { \r\n        \"back_arch_avg\": 95, \r\n        \"elbow_flare_avg\": 80 \r\n      }\r\n    },\r\n    {\r\n      \"exercise_name\": \"Dumbbell Overhead Press\",\r\n      \"sets_completed\": 3,\r\n      \"reps_completed\": \"12, 10, 10\",\r\n      \"weight_kg\": \"20, 20, 20\",\r\n      \"posture_feedback\": null\r\n    }\r\n  ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/sessions/",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"sessions",
+								""
+							]
+						},
+						"description": "receive session workout"
+					},
+					"response": []
+				},
+				{
+					"name": "Get session detail",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token {{authToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/sessions/1/",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"sessions",
+								"1",
+								""
+							]
+						},
+						"description": "Xem chi tiết từng session"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Dashboard",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token {{authToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/dashboard/",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"dashboard",
+								""
+							]
+						},
+						"description": "Hiển thị màn hình dashboard"
+					},
+					"response": []
+				},
+				{
+					"name": "List My Sessions",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token {{authToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/sessions/",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"sessions",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "API liên quan đến lưu thông tin session tập, lấy thông tin session cụ thể qua id và hiển thị dashboard và lấy thông tin toàn bộ session"
+		},
+		{
+			"name": "Exercises",
+			"item": [
+				{
+					"name": "Fillter Exercise",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token {{authToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/exercises/?muscle_group=legs&equipment=full_gym",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"exercises",
+								""
+							],
+							"query": [
+								{
+									"key": "muscle_group",
+									"value": "legs"
+								},
+								{
+									"key": "equipment",
+									"value": "full_gym"
+								}
+							]
+						},
+						"description": "Tìm kiếm bài tập với filter là muscle group và equipment"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Custom Exercise",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token {{authToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/exercises/",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"exercises",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "API liên quan đến truy vấn kho dữ liệu bài tập"
+		},
+		{
+			"name": "Nutrition",
+			"item": [
+				{
+					"name": "post meal and calo in",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token {{authToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"food_name\": \"Ức gà và Cơm\",\r\n  \"calories\": 450,\r\n  \"protein_g\": 35.5,\r\n  \"carbs_g\": 50.0,\r\n  \"fat_g\": 10.2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/nutrition-logs/",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"nutrition-logs",
+								""
+							]
+						},
+						"description": "Tạo log dinh dưỡng"
+					},
+					"response": []
+				},
+				{
+					"name": "post hydration",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token {{authToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"water_ml\": 250\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/hydration-logs/",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"hydration-logs",
+								""
+							]
+						},
+						"description": "Tạo log hydration"
+					},
+					"response": []
+				},
+				{
+					"name": "suggest nutrition",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token {{authToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/nutrition/suggest/",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"nutrition",
+								"suggest",
+								""
+							]
+						},
+						"description": "Meal suggestion"
+					},
+					"response": []
+				},
+				{
+					"name": "List My Nutrition Logs",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token {{authToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/nutrition-logs/",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"nutrition-logs",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List My Hydration Logs",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token {{authToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/hydration-logs/",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"hydration-logs",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "APi liên quan đến gợi ý chế độ dinh dưỡng, nhập lịch sử ăn uống"
+		}
+	],
+	"variable": [
+		{
+			"key": "authToken",
+			"value": ""
+		}
+	]
+}
