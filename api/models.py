@@ -12,17 +12,40 @@ from django.dispatch import receiver
 class Profile(models.Model):
     """ Mở rộng User model mặc định để lưu thông tin thể chất """
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+
+    # === ĐỊNH NGHĨA CÁC LỰA CHỌN ===
+    class GenderChoices(models.TextChoices):
+        MALE = 'male', 'Male'
+        FEMALE = 'female', 'Female'
+        OTHER = 'other', 'Other'
+
+    class ActivityChoices(models.TextChoices):
+        SEDENTARY = 'sedentary', 'Sedentary'
+        LIGHT = 'light', 'Light'
+        MODERATE = 'moderate', 'Moderate'
+        ACTIVE = 'active', 'Active'
+        VERY_ACTIVE = 'very_active', 'Very Active'
+
+    class GoalChoices(models.TextChoices):
+        LOSE_WEIGHT = 'lose_weight', 'Lose Weight'
+        BUILD_MUSCLE = 'build_muscle', 'Build Muscle'
+        MAINTAIN = 'maintain', 'Maintain'
+
+    class ExperienceChoices(models.TextChoices):
+        BEGINNER = 'beginner', 'Beginner'
+        INTERMEDIATE = 'intermediate', 'Intermediate'
+        ADVANCED = 'advanced', 'Advanced'
     
     # Dữ liệu onboarding (UC03)
     height_cm = models.FloatField(null=True, blank=True)
     weight_kg = models.FloatField(null=True, blank=True)
     age = models.IntegerField(null=True, blank=True)
-    gender = models.CharField(max_length=10, null=True, blank=True) # (e.g., 'male', 'female', 'other')
-    activity_level = models.CharField(max_length=20, null=True, blank=True) # (e.g., 'sedentary', 'active')
+    gender = models.CharField(max_length=10, null=True, blank=True, choices=GenderChoices.choices) # (e.g., 'male', 'female', 'other')
+    activity_level = models.CharField(max_length=20, null=True, blank=True, choices=ActivityChoices.choices) # (e.g., 'sedentary', 'active')
     
     # Dữ liệu mục tiêu (UC06)
-    main_goal = models.CharField(max_length=50, null=True, blank=True) # (e.g., 'lose_weight', 'build_muscle')
-    experience_level = models.CharField(max_length=20, null=True, blank=True) # (e.g., 'beginner', 'intermediate')
+    main_goal = models.CharField(max_length=50, null=True, blank=True, choices=GoalChoices.choices) # (e.g., 'lose_weight', 'build_muscle')
+    experience_level = models.CharField(max_length=20, null=True, blank=True, choices=ExperienceChoices.choices) # (e.g., 'beginner', 'intermediate')
     days_per_week = models.IntegerField(null=True, blank=True)
 
     EQUIPMENT_CHOICES = [
@@ -47,16 +70,50 @@ def create_user_profile(sender, instance, created, **kwargs):
 # -------------------------------------------------------------------
 class Exercise(models.Model):
     """ Thư viện các bài tập (Admin có thể thêm qua Django Admin) """
+
+    # --- ĐỊNH NGHĨA CÁC LỰA CHỌN (CHOICES) ---
+    class MuscleGroup(models.TextChoices):
+        LEGS = 'legs', 'Legs'
+        CHEST = 'chest', 'Chest'
+        BACK = 'back', 'Back'
+        SHOULDERS = 'shoulders', 'Shoulders'
+        ARMS = 'arms', 'Arms'
+        CORE = 'core', 'Core'
+        OTHER = 'other', 'Other'
+
+    class Difficulty(models.TextChoices):
+        BEGINNER = 'beginner', 'Beginner'
+        INTERMEDIATE = 'intermediate', 'Intermediate'
+        ADVANCED = 'advanced', 'Advanced'
+
+    class Equipment(models.TextChoices):
+        BODYWEIGHT = 'bodyweight', 'Bodyweight'
+        BASIC_GYM = 'basic_gym', 'Basic Gym (Dumbbells/Bar)'
+        FULL_GYM = 'full_gym', 'Full Gym (Machines)'
+    
+    class MovementPattern(models.TextChoices):
+        HORIZONTAL_PUSH = 'horizontal_push', 'Horizontal Push'
+        HORIZONTAL_PULL = 'horizontal_pull', 'Horizontal Pull'
+        VERTICAL_PUSH = 'vertical_push', 'Vertical Push'
+        VERTICAL_PULL = 'vertical_pull', 'Vertical Pull'
+        SQUAT = 'squat', 'Squat'
+        HINGE = 'hinge', 'Hinge'
+        LUNGE = 'lunge', 'Lunge'
+        ISOLATION = 'isolation', 'Isolation'
+        CORE = 'core', 'Core'
+        OTHER = 'other', 'Other'
+
+
     name = models.CharField(max_length=100, unique=True)
     description = models.TextField()
     video_url = models.URLField(null=True, blank=True)
-    muscle_group = models.CharField(max_length=50, db_index=True) # (e.g., 'legs', 'chest', 'back')
-    difficulty = models.CharField(max_length=20, null=True, blank=True) # (e.g., 'beginner')
-    equipment = models.CharField(max_length=50, null=True, blank=True) # (e.g., 'bodyweight', 'dumbbells')
-    movement_pattern = models.CharField(max_length=50, null=True, blank=True) # (e.g., 'squat', 'hinge')
+    muscle_group = models.CharField(max_length=50, db_index=True, choices=MuscleGroup.choices) # (e.g., 'legs', 'chest', 'back')
+    difficulty = models.CharField(max_length=20, null=True, blank=True, choices=Difficulty.choices) # (e.g., 'beginner')
+    equipment = models.CharField(max_length=50, null=True, blank=True, choices=Equipment.choices) # (e.g., 'bodyweight', 'dumbbells')
+    movement_pattern = models.CharField(max_length=50, null=True, blank=True, choices=MovementPattern.choices) # (e.g., 'squat', 'hinge')
     
     # (UC17) Nếu user tự tạo bài tập, gán user vào đây
-    created_by = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL)
+    created_by = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL, related_name='custom_exercises')
 
     def __str__(self):
         return self.name
