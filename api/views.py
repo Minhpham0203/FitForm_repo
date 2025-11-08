@@ -193,7 +193,8 @@ class WorkoutPlanViewSet(viewsets.ModelViewSet):
                         "exercise_name": exercise.name, # Thêm tên cho dễ đọc ở frontend
                         "sets": sets,
                         "reps": reps,
-                        "day_number": day_number # Đây là lý do Nâng cấp 2 quan trọng
+                        "day_number": day_number, # Đây là lý do Nâng cấp 2 quan trọng
+                        "description": exercise.description
                     }
                     final_exercise_list.append(exercise_json)
 
