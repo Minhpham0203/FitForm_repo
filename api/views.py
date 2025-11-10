@@ -16,7 +16,7 @@ from .serializers import (
     WorkoutSessionSerializer,
     NutritionLogSerializer,
     HydrationLogSerializer,
-    ExerciseGuideSerializer
+    ExcersiseGuideSerializer
 )
 from .utils import calculate_tdee
 
@@ -56,7 +56,7 @@ class ExerciseViewSet(viewsets.ModelViewSet): # <-- 1. ĐỔI THÀNH ModelViewSe
     # (Bạn cũng có thể thêm 'search_fields' nếu muốn tìm kiếm text)
     # search_fields = ['name', 'description'] 
 
-    @action(detail=True, methods=['get'], serializer_class=ExerciseGuideSerializer)
+    @action(detail=True, methods=['get'], serializer_class=ExcersiseGuideSerializer)
     def guide(self, request, pk=None):
         """
         API tùy chỉnh (chỉ GET) để trả về
