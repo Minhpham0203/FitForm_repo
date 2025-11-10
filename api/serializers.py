@@ -45,6 +45,14 @@ class ExerciseSerializer(serializers.ModelSerializer):
             'muscle_group', 'difficulty', 'equipment', 'movement_pattern'
         ]
 
+class ExcersiseGuideSerializer(serializers.ModelSerializer):
+    """ 
+    Serializer "gọn nhẹ" chỉ trả về video_url và description.
+    """
+    class Meta:
+        model = Exercise
+        fields = ['description', 'video_url']
+
 # --- NHÓM 2: PLAN MANAGEMENT (Phức tạp hơn) ---
 
 class PlanExerciseSerializer(serializers.ModelSerializer):
