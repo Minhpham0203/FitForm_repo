@@ -70,10 +70,8 @@ class PlanExerciseSerializer(serializers.ModelSerializer):
     class Meta:
         model = PlanExercise
         fields = ['id', 'exercise_id', 'exercise_name', 'description', 
-            'video_url','sets', 'reps', 'day_number', 'exercise']
-        extra_kwargs = {
-            'exercise': {'write_only': True} 
-        }
+            'video_url','sets', 'reps', 'day_number', ]
+        
 
 class WorkoutPlanSerializer(serializers.ModelSerializer):
     """ Dịch Kế hoạch tập luyện (UC07) """
