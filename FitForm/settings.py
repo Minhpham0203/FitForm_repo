@@ -243,3 +243,4 @@ REST_FRAMEWORK = {
 ACCOUNT_EMAIL_VERIFICATION = 'none' 
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = True # (Bạn có thể set False nếu chỉ muốn login bằng email)
+ACCOUNT_UNIQUE_EMAIL = True
