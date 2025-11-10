@@ -64,6 +64,9 @@ class PlanExerciseSerializer(serializers.ModelSerializer):
     # Gửi tên bài tập khi đọc
     exercise_name = serializers.CharField(source='exercise.name', read_only=True)
 
+    description = serializers.CharField(source='exercise.description', read_only=True)
+    video_url = serializers.URLField(source='exercise.video_url', read_only=True)
+
     class Meta:
         model = PlanExercise
         fields = ['id', 'exercise_id', 'exercise_name', 'sets', 'reps', 'day_number']
